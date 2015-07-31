@@ -52,7 +52,9 @@ function addImage(link, type){
 
 function updateScreen(length,density,tortuosity,b64pix, CNBD, imageArea, time){
 
-
+    ref.child("uploads").once("value", function(snapshot){
+        snapshot.exportVal(snapshot.val + 1);
+    });
 
     if(user != "loggedOut" && b64pix != null && b64pix != "oops"){
         $(".userTort").text(tortuosity);
