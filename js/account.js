@@ -6,9 +6,6 @@ if(token == null){
   token = "No Token"
 }
 
-
-//createUser('rohan@techlabeducation.com', 'jenga') //this should be called from html when a button is pressed or something
-
 ref.authWithCustomToken(token, function(error, result) {
   if (error) {
     console.log("No pre-existing token found");
@@ -100,8 +97,6 @@ ref.onAuth(function(){
     }
 });
 
-
-// Debug code
 function deleteUser(email, password){
     ref.removeUser({
         email: email,
@@ -125,13 +120,18 @@ function deleteUser(email, password){
     });
 }
 
-setTimeout(accountAuthStatus, 500);
+function checkIfEmailInString(text) {
+    var re = /(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/;
+    return re.test(text);
+}
 
 function accountAuthStatus(){
     $(".auth-status").animate({
         bottom: "0%"
     },500);
 }
+
+setTimeout(accountAuthStatus, 500);
 
 $(".auth-status").click(function(){
     if(user == "loggedOut"){
@@ -173,9 +173,3 @@ $(".signup-form").submit(function(e) {
         $(".alert").show();
     }
 });
-
-
-function checkIfEmailInString(text) {
-    var re = /(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/;
-    return re.test(text);
-}
