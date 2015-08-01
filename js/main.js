@@ -1,5 +1,6 @@
 var ref = new Firebase("https://opencv.firebaseio.com/");
 var aviSpeed = "aviquick"
+var processed = "no"
 var upload = true;
 
 var dataRef = ref.child("data");
@@ -18,12 +19,13 @@ ref.child("serverstatus").on("value", function(snapshot){
 });
 
 
-function addImage(link, type){
+function addImage(link, type, processed){
 
     var tasksRef = ref.child("tasks");
     var newMessageRef = tasksRef.push({
         'src': link,
-        'type': type
+        'type': type,
+        'p': processed
     });
     var id = String(newMessageRef.key());
     var completionRef = ref.child("completion");
@@ -108,7 +110,7 @@ function showFilePickImg(){
             for(var i = 0; i < Blobs.length; i++){
                 images.push(Blobs[i].url);
             }
-            addImage(images, "jpg");
+            addImage(images, "jpg", processed);
         },
         function(error){
             console.log(JSON.stringify(error));
@@ -126,7 +128,8 @@ function showFilePickVid(){
         },
         function(Blob){
             var videos = [Blob.url];
-            addImage(videos, aviSpeed);
+            console.log(processed);
+            addImage(videos, aviSpeed, processed);
         },
         function(FPError){
             console.log(FPError.toString());
@@ -135,12 +138,12 @@ function showFilePickVid(){
 }
 
 function changeCheckVal(elem){
-    if(elem.checked){
-        $(".avi-type").text("AVI Slow");
-        aviSpeed = "avislow"
+    if(!elem.checked){
+        $(".process").text("Unprocessed");
+        processed = "no";
     }else{
-        $(".avi-type").text("AVI Quick");
-        aviSpeed = "aviquick"
+        $(".process").text("Processed");
+        processed = "yes";
     }
 }
 
