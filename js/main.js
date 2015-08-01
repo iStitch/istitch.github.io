@@ -1,5 +1,6 @@
 var ref = new Firebase("https://opencv.firebaseio.com/");
 var aviSpeed = "aviquick"
+var upload = true;
 
 var dataRef = ref.child("data");
 dataRef.child("average").once("value", function(snapshot){
@@ -9,7 +10,7 @@ dataRef.child("average").once("value", function(snapshot){
     $(".avgDens").text(snapshot.val().density.val);
     $(".avgArea").text(snapshot.val().imagearea.val);
 });
-dataRef.child("uploads").once("value", function(snapshot){
+dataRef.child("uploads").on("value", function(snapshot){
     $(".numUsers").text(snapshot.val());
 });
 ref.child("serverstatus").on("value", function(snapshot){
@@ -51,10 +52,13 @@ function addImage(link, type){
 
 
 function updateScreen(length,density,tortuosity,b64pix, CNBD, imageArea, time){
-
-    ref.child("uploads").once("value", function(snapshot){
-        snapshot.exportVal(snapshot.val + 1);
-    });
+    if(upload){
+        dataRef.child("uploads").once("value", function(snapshot){
+            var updatedUploads = snapshot.val() + 1;
+            dataRef.child("uploads").set(updatedUploads);
+        });
+        upload = false;
+    }
 
     if(user != "loggedOut" && b64pix != null && b64pix != "oops"){
         $(".userTort").text(tortuosity);
@@ -93,10 +97,11 @@ $(".filepickervid").click(showFilePickVid);
 
 
 function showFilePickImg(){
+    upload = true;
     filepicker.pickMultiple(
         {
             mimetype: 'image/*',
-            maxFiles: 100,
+            maxFiles: 1,
         },
         function(Blobs){
             var images = [];
@@ -114,6 +119,7 @@ function showFilePickImg(){
 
 
 function showFilePickVid(){
+    upload = true;
     filepicker.pick(
         {
             mimetype: 'video/*'
