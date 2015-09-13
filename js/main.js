@@ -58,7 +58,7 @@ function updateScreen(length,density,tortuosity,b64pix, CNBD, imageArea, time){
         upload = false;
     }
 
-    if(user != "loggedOut" && b64pix != null && b64pix != "oops"){
+    if( b64pix != null && b64pix != "oops"){
         $(".userTort").text(tortuosity);
         $(".userlen").text(length);
         $(".userCNBD").text(CNBD);
